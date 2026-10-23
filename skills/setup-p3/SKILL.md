@@ -22,7 +22,7 @@ The roles are the labels shown in step 5. If `p3-models.md` already exists at th
 
 **(a) Ask for a budget.** Ask plainly in the thread. Offer these four options with these exact labels, and name the current budget when the file records one.
 
-- `unlimited — keep max`
+- `unlimited — max reasoning`
 - `large — xhigh reasoning`
 - `medium — high reasoning`
 - `small — medium reasoning`
@@ -44,7 +44,7 @@ Write `p3-models.md` with a `# budget` line with the chosen label and its target
 ```
 # p3 model configuration. One line per role. Delete a line to fall back to the skill default.
 # `inherit-parent` as a value: the role runs on the parent thread's model (omit the delegate_task model). Entries in a panel list still count toward its fan-out.
-# budget: unlimited (max)
+# budget: large (xhigh)
 feature, refactoring: <providerInstanceId>/<model> (<effort>)
 bug-fix: <providerInstanceId>/<model> (<effort>)
 perf-issue: <providerInstanceId>/<model> (<effort>)
@@ -71,3 +71,7 @@ Tell the user the file was written, where, and that it applies to new sessions. 
 ### 7. Offer a verification skill (optional)
 
 Check whether the project has a way to drive the real app for proof (a `verify-*` skill, or an existing harness). If not, offer once: "want a project-local verification skill, so agents can drive the app the way a user does and prove changes work? I can generate one with /create-verification-skill." On yes, invoke `/create-verification-skill`. On no, move on without pushing.
+
+### 8. Offer a formal verification skill (optional)
+
+Check whether the project has a skill that runs a model checker, proof, or another verifier against named code. If not, offer once to generate one with `/create-formal-verification-skill`. Explain that it checks a property within stated bounds and assumptions. On yes, run that skill. On no, move on.

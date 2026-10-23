@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # Show me your work
 
+For each delegate, match effort to the job per the Subagents section of `../p3-mode/SKILL.md`, preserving the configured role and provider.
+
 Keep one canonical log.
 
 ## The format

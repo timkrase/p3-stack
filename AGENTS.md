@@ -4,9 +4,6 @@ p3-stack adapts [pstack](https://github.com/cursor/plugins/tree/main/pstack) by 
 
 A skill reads as if it were written for T3 Code first. Keep pstack's sentences verbatim wherever they still apply. Replace every Cursor mechanism with the T3 Code equivalent below.
 
-## Delegated workers
-
-If you are a delegated worker, your brief names exactly one file. Write only that file, create parent directories as needed, and run no git commands. Report back the file path, its line count, and the changes you made to pstack's version.
 
 ## Cursor to T3 Code map
 
@@ -14,14 +11,14 @@ If you are a delegated worker, your brief names exactly one file. Write only tha
 |---|---|
 | `Task` tool, `subagent_type`, `run_in_background` | `delegate_task` with a self-contained brief; `mode: "async"` for background work; `task_status` to drain; `task_cancel` to stop |
 | Model slugs (`claude-opus-5-5-max`, `grok-4.7-xhigh-fast`, `gpt-5.6-sol-max`) | Named roles resolved from `orchestrator_capabilities` by `setup-p3` (role names below). Never hardcode a slug. |
-| "cloud agent", `environment: "cloud"`, `cloud_base_branch` | A delegated child task. Use `t3_thread_launch` only when the worker needs its own top-level thread, worktree, or branch. |
-| "each worker gets its own worktree or branch" | `t3_thread_launch` with `workspaceStrategy`: `{"type":"worktree","baseRef":...,"branch":...}`, `{"type":"existing_worktree","worktreePath":...}`, or `{"type":"root"}`. One writer per worktree. |
+| "cloud agent", `environment: "cloud"`, `cloud_base_branch` | A delegated child task. Create top-level threads only when explicitly requested by the user. |
+| "each worker gets its own worktree or branch" | Create isolated worktrees with git before `delegate_task`, and put absolute paths in briefs. One writer per worktree. |
 | `/loop`, poll loops, `scripts/watch-pr` | `watch_pull_request`: T3 watches the PR and wakes the thread on checks finishing, new comments, or conflicts. Arm it, end the turn, triage on wake. For other cadences use `schedule_task`. |
 | Hourly audit ticks, recurring runs | `schedule_task` with `{"type":"interval","everyMs":...}` or `{"type":"fixed_time","timeOfDay":...,"weekdays":[...]}`; `run_scheduled_task_now` for an immediate run. |
 | Stack bookkeeping with `gt`, manual PR lists | `link_pull_request` for every layer, immediately; `list_thread_pull_requests` returns the stack bottom to top. |
 | `agent-transcripts/*.jsonl` mining | `t3_thread_read`, `t3_thread_search`; `t3_queue_list`/`t3_queue_read`/`t3_queue_edit`/`t3_queue_reorder`/`t3_queue_cancel`/`t3_queue_promote_to_steer` for queued input. |
 | `AskQuestion` | Ask plainly in the thread. `t3_pending_request_list`/`t3_pending_request_read`/`t3_pending_request_respond` answer questions in other threads. |
-| `control-ui`, `control-cli` (from cursor-team-kit) | `preview_*` browser tools and `device_*` simulator tools; `preview_recording_start`/`preview_recording_stop` and `device_screenshot` for evidence; `browser.preview` shows a file to the user. |
+| `control-ui`, `control-cli` (from cursor-team-kit) | `preview_*` browser tools and `device_*` simulator tools; `preview_recording_start`/`preview_recording_stop` and `device_screenshot` for evidence; `html_preview` and `html_render` check and publish HTML artifacts. |
 | `~/.cursor/rules/pstack-models.mdc`, `/add-plugin` | `setup-p3` writes `p3-models.md`; install is a symlink of `skills/*` into `~/.agents/skills/` (see README). |
 | `poteto-mode`, `poteto-agent`, `poteto-help`, `setup-pstack` | `p3-mode`, `agents/p3-agent.md`, `p3-help`, `setup-p3`. |
 | Cursor custom modes ("press option+enter") | Skills are invoked by name (`/p3-mode`). No mode toggles. |
@@ -68,3 +65,9 @@ Keep these names exactly.
 1. Every step names a T3 mechanism or a vendor-neutral habit. Grep for `Cursor`, `Task tool`, `subagent_type`, `cloud agent`, `.cursor`, `agent-transcripts`, `AskQuestion`, `icon:`, `claude-`, `grok-`, `gpt-`, `/loop`. None may remain.
 2. It is shorter than the pstack source unless the T3 rewrite genuinely needs the lines.
 3. Frontmatter matches the rules above, and references to other skills resolve to files in this repo.
+
+## Upstream sync
+
+`UPSTREAM.json` pins pstack and records every included or excluded skill and agent file. Preserve source attribution and update that manifest with each sync. Run `python3 scripts/check-port.py --upstream /path/to/cursor-plugins` to verify coverage and source hashes, then run the statechart tests described in README.md.
+
+Keep delegation and top-level conversations distinct. Every delegated review round uses a fresh `delegate_task`, with its original brief, prior findings, and unresolved objections. Retain the returned `taskId`; never continue a review through the backing child thread. Use `t3_thread_launch` or `create_threads` only for an explicit user request for separate conversations.

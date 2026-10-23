@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 # No comments
 
+For each delegate, match effort to the job per the Subagents section of `../p3-mode/SKILL.md`, preserving the configured role and provider.
+
 Spawn Comment Sicko. Act on accepted findings.
 
 Defer to Comment Sicko's fresh perspective.

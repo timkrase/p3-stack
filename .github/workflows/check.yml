@@ -1,0 +1,46 @@
+name: Check p3-stack
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Check port and installer
+        run: |
+          python3 scripts/check-port.py
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          bash -n install.sh
+      - name: Fetch pinned pstack source
+        run: |
+          git clone --filter=blob:none --no-checkout https://github.com/cursor/plugins.git "$RUNNER_TEMP/pstack"
+          python3 scripts/check-port.py --upstream "$RUNNER_TEMP/pstack"
+      - name: Fetch verified TLC
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, urllib.request
+          from pathlib import Path
+          config = json.loads(Path('UPSTREAM.json').read_text())['verification']
+          jar = Path(os.environ['RUNNER_TEMP']) / 'tla2tools.jar'
+          urllib.request.urlretrieve(config['tlcUrl'], jar)
+          if hashlib.sha256(jar.read_bytes()).hexdigest() != config['tlcSha256']:
+              raise SystemExit('TLC asset changed; review it and update the checksum before testing.')
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write(f'TLA2TOOLS={jar}\n')
+          PY
+      - name: Check statechart against TLC
+        run: node --test --test-timeout=300000 skills/statechart/scripts/test/statechart.test.mjs
