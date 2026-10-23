@@ -53,7 +53,7 @@ The program runs `skills/p3-mode/playbooks/<execution playbook>.md`. <Who merges
 - [ ] <The merge or append rule from the execution playbook, with the patch-id rule from `playbooks/shipping.md`.>
 
 ### Boot recipe, for every live lane
-Each live lane is a delegated worker at the PR head. Create an isolated worktree with git before delegating a lane that needs one. Drive the surface through `preview_*` for browser UIs and `device_*` for simulators.
+Each live lane is a delegated worker at the PR head. Apply the [workspace rules](../../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes). In managed boxes, run writing and runtime-verification lanes sequentially in the prepared checkout; read-only lanes may share a stable revision. Drive the surface through `preview_*` for browser UIs and `device_*` for simulators.
 
 - [ ] `git fetch origin <head-branch> && git checkout <head SHA>`.
 - [ ] <Start the backend and the surface. Wait for ready.>

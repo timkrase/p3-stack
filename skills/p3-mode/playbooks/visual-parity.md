@@ -4,7 +4,7 @@
 
 1. Establish the baseline first, before any migration: a visual regression harness that screenshots the current component across its states with the `preview_*` screenshot and recording tools, or `device_*` where a simulator is the surface, plus the target when matching two implementations. No baseline, no parity claim. A blocking prerequisite, not a follow-up.
 2. Anti-shortcut clauses, stated and held: no harness modifications, no baseline tampering, no component restructuring to make a diff pass. If the baseline looks wrong, stop and ask, don't edit it.
-3. Migrate one component at a time. Parallelize across worktrees, one owner per component (the **separate-before-serializing-shared-state** principle skill); create each owner's worktree and branch with git before delegation, one writer per worktree. Shared primitives migrate first as a blocking phase.
+3. Migrate one component at a time. Apply the [workspace rules](../../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes): managed boxes migrate and verify components sequentially in their prepared checkout; parallel writers require supported independent environments. Shared primitives migrate first as a blocking phase.
 4. Verify each component against its baseline via image diff on the matching surface (`preview_*` for a browser, `device_*` for a simulator). A nonzero diff is a fail. Investigate the pixel delta. Iterate per component until the diff is zero.
 5. Run **Opening a PR** per component or per safe batch.
 

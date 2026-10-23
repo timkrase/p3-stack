@@ -2,7 +2,7 @@
 
 **You own the verdicts, never the PRs. One owner carries each PR from build to merge, and nothing merges until your swarm, which never wrote the code, has proven the code that lands.**
 
-Use `delegate_task` with self-contained briefs, `mode: "async"`, named roles from `p3-models.md`, and targets resolved through `orchestrator_capabilities`. Drain with `task_status` and cancel with `task_cancel`. Allocate separate worktrees before starting writers and include their absolute paths in the briefs. Use `watch_pull_request` to wait on PRs, then end the turn.
+Use `delegate_task` with self-contained briefs, `mode: "async"`, named roles from `p3-models.md`, and targets resolved through `orchestrator_capabilities`. Drain with `task_status` and cancel with `task_cancel`. Apply the [workspace rules](../../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes) before starting writers. Managed boxes use one prepared checkout and run owners sequentially, including verification. Include the path and restriction in each brief. Use `watch_pull_request` to wait on PRs, then end the turn.
 
 A verdict covers one patch and green CI covers one head. Step 4 runs a full swarm once, and again only for a major change. The patch-id rule in `playbooks/shipping.md` can carry a lane's result, and every new head needs its own green CI.
 

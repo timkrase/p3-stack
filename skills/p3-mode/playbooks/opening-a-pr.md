@@ -2,7 +2,7 @@
 
 Invoked at the end of every other playbook.
 
-**Worktree.** Create isolated worktrees with git before delegation, one writer per worktree. Include the absolute path and branch in each brief. Preserve unrelated changes and use a fresh worktree when the current checkout is occupied.
+**Workspace.** Follow the [workspace rules](../../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes). Managed boxes keep their prepared checkout and finish one writer and its verification before starting another. An occupied checkout means wait, not create another worktree. Include its path, branch, and restriction in every brief; preserve unrelated changes.
 
 **Commits.** Commit liberally. Rebase into small, ordered commits before opening PRs. Each commit is a future PR: landable, ordered to tell the story. Amend when the fix belongs in a just-made commit. New commit when separable. Commit bodies don't restate the subject.
 
@@ -25,7 +25,7 @@ After the sections, attach videos or screenshots when they prove a claim. Full S
 
 **Built-in PR tool.** T3's built-in PR tool is `link_pull_request`, and it registers a PR rather than creating one. Call it with the full URL the moment a PR opens, and link every layer of a stack; a PR created through `gh` is untracked until it is linked. `list_thread_pull_requests` returns the stack bottom to top. Create, edit, retarget, and mark ready through `gh`.
 
-**Size and stacks.** Prefer five narrow PRs to one large PR. A stack is a base-branch chain. The root PR targets trunk. Each child branch rebases onto its parent's exact tip and its PR targets the parent branch. Create a child with `gh pr create --base <parent-branch>`, and retarget an existing child with `gh pr edit <pr> --base <parent-branch>`. Branch from trunk only for independent work. Rebase on trunk before substantial stack work.
+**Size and stacks.** Follow the user's requested PR count and repository policy. Split only when authorized and useful for review. In a managed box, implement and verify slices sequentially in the same checkout; separate PR refs do not require separate worktrees. A stack is a base-branch chain. The root PR targets trunk. Each child branch rebases onto its parent's exact tip and its PR targets the parent branch. Create a child with `gh pr create --base <parent-branch>`, and retarget an existing child with `gh pr edit <pr> --base <parent-branch>`. Branch from trunk only for independent work. Rebase on trunk before substantial stack work.
 
 **Readiness.** Open every PR ready, never as a draft. With `gh`, omit `--draft`. If a PR still opens as a draft, run `gh pr ready <number>`. Run `gh pr view <number>` before you refer to PR status.
 

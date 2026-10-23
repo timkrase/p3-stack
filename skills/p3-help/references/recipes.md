@@ -42,7 +42,7 @@ Swap in the real paths, skills, and done checks. Informal wording works.
 
 ## Away and back
 
-- `/p3-mode im going to bed. <goal> in a fresh worktree off <base>. done means <checks>. keep a decision log. don't ask me before committing. keep working until done. if you're truly stuck after a few hours, stop and write up why.`
+- `/p3-mode im going to bed. <goal> from <base>, using the existing checkout in a managed box and sequential writers. done means <checks>. keep a decision log. don't ask me before committing. keep working until done. if you're truly stuck after a few hours, stop and write up why.`
 - `/show-me-your-work catch me up on what you did last night.` Read its Attention section first.
 - `/ketchup` catches you up on this chat since your last message and lists every call that waits on you.
 - `/p3-mode full autopilot on this queue. each item is independent.`

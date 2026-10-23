@@ -39,7 +39,7 @@ A prompt states the intent and the check for done. The playbook supplies the ste
 
 - Say "im going to bed" or "im stepping away" so the agent stops asking.
 - Write done as checks every iteration can run, and give the Autonomous run playbook that predicate.
-- Ask for a fresh worktree off a named base.
+- Name the base. In a managed box, use its prepared checkout and sequential work; request a fresh worktree only where the setup supports it.
 - Pre-answer what the agent would stop for, such as "don't ask me before committing".
 - Ask for a decision log to audit later.
 - Give an exit: "if you're truly stuck after a few hours, stop and write up why".

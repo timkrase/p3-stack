@@ -30,7 +30,7 @@ Decompose into atomic, independently-landable units. Sequence riskiest-unknown-f
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
 - For one-way-door design decisions, run the **architect** skill (it runs **arena**). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the **laziness-protocol** principle skill).
-- Decide what fans out. Parallelize only across seams, and create each writer's worktree with git before delegation, one writer per worktree (the **separate-before-serializing-shared-state** principle skill). Don't over-fan.
+- Decide what fans out. Follow the [workspace rules](../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes) before parallelizing across seams. Managed boxes keep one checkout and run writers sequentially. Don't over-fan.
 - Every `delegate_task` brief stands alone: the child gets only the brief, never your context. Read-only workers get a brief that says read-only, inspect only, no writes. Resolve models from named roles in `p3-models.md` via `orchestrator_capabilities`; never hardcode a slug.
 - Write the designed phase list down. That list is what the human reviews.
 

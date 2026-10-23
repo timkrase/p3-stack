@@ -5,7 +5,7 @@ p3-stack is [pstack](https://github.com/cursor/plugins/tree/main/pstack) rebuilt
 pstack is poteto's answer to AI slop code. It turns an agent into an engineering team: one mode skill that routes to playbooks, principles that ground every decision, and verification strict enough that you can parallelize with confidence. p3-stack keeps that system and rewires the mechanics to T3 Code's primitives:
 
 - **Delegation.** `delegate_task` child agents replace Cursor's Task tool, with per-role providers and models resolved from `orchestrator_capabilities`. Cross-model panels are native.
-- **Worktrees.** Create an isolated git worktree for each writer before delegation. Top-level T3 threads are created only when the user explicitly requests separate conversations.
+- **Workspaces.** Managed boxes keep one prepared checkout and run writers sequentially. Workstations may use isolated worktrees when their setup supports them. Top-level T3 threads are created only when the user explicitly requests separate conversations.
 - **Watching.** `watch_pull_request` wakes the thread when checks finish, someone comments, or the branch conflicts. No polling loops.
 - **Scheduling.** `schedule_task` runs audits and overnight cadences even when no turn is active. No `/loop`.
 - **Memory.** `t3_thread_read` and `t3_thread_search` replace mining Cursor transcript files.

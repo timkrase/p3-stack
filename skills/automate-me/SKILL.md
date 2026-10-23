@@ -81,7 +81,7 @@ Show the draft to the user and take feedback. Expect multiple iterations. Cut ru
 
 ### 6. Land it
 
-Work in a worktree off main. Commit and open a PR. Don't push to main directly.
+Follow the [workspace rules](../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes). In a managed box, use its prepared checkout exclusively; elsewhere, use a worktree off main when the setup supports it. Commit and open a PR when authorized. Don't push to main directly.
 
 ## Guardrails
 

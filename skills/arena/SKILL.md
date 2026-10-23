@@ -17,11 +17,11 @@ Every candidate gets the same prompt, so the prompt is the contract.
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
 3. Pick the runners. Use the `arena runners` line in `p3-models.md`, resolved against `orchestrator_capabilities`. If the file or that line is missing, run `setup-p3` or pick one model per available provider from `orchestrator_capabilities`. An `auto` or `inherit-parent` entry in this line or the cross-judge line means the parent model, so omit `model` for it. If `delegate_task` rejects a configured entry, run that seat on the closest valid model of the same provider from its error message and say so. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
-4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill. Create each candidate's worktree with git before delegation and include its absolute path in the brief. One writer per worktree.
+4. Assign output paths using the [workspace rules](../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes). Design documents may use `/tmp/arena-<slug>/candidate-<n>/`. In a managed box, runnable candidates use the one prepared checkout sequentially; record each candidate in commits before the next, preserve its result, and never create another checkout. Separate worktrees are an option only when the environment supports them. Include the path and restriction in each brief.
 
 ## Phase B: Fan out
 
-Spawn all N candidates in one turn with `delegate_task`, one per runner entry, each with `mode: "async"`. T3 child agents get only the brief, never the parent's context, so every brief stands alone: the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
+Spawn candidates with `delegate_task`, one per runner entry, each with `mode: "async"`. Start them together only when step 4 permits parallel execution; otherwise drain and verify each candidate before starting the next. T3 child agents get only the brief, never the parent's context, so every brief stands alone: the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
 
 Each rationale names the alternatives the candidate considered and what it rejected.
 

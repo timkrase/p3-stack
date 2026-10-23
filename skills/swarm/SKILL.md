@@ -29,7 +29,7 @@ Open a todolist with one entry per phase before launching anything.
 
 ## Phase B: Fan out
 
-Spawn all N workers in one turn with `delegate_task`, `mode: "async"`, and the step 4 target, left unset for `auto` or `inherit-parent`. Create isolated worktrees with git before delegation and include each absolute path in its worker's brief. One writer per worktree.
+Choose concurrency using the [workspace rules](../principle-separate-before-serializing-shared-state/SKILL.md#managed-boxes). In managed boxes, run repository writers one at a time in the prepared checkout; drain and verify each before starting the next. Read-only workers may run in parallel against a stable revision. Use `delegate_task`, `mode: "async"`, and the step 4 target, left unset for `auto` or `inherit-parent`. Include the path and workspace restriction in every brief.
 
 Every brief stands alone. Child agents get only the brief, never the parent's context. Include the goal, scope, exact slice or race arm, how to verify, and what to report. Reports use `PASS`, `ISSUES`, or `BLOCKED` with evidence. A worker that can prove a defect reports `ISSUES` and lists every issue it can prove, not only the first.
 

@@ -112,7 +112,7 @@ Principles are one-rule skills that `/p3-mode` reads and cites in its replies. T
 | A new model choice had no effect | The file from `/setup-p3` applies to new sessions. Start one. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
 | A skill didn't load on its own | `/p3-help` loads when invoked by name. The others load when the user invokes them by name or when `/p3-mode` runs them, and it doesn't run every skill. |
-| Parallel agents overwrote each other | Create a worktree for each writer before delegation, and include its absolute path in the brief. |
+| Parallel agents overwrote each other | In managed boxes, keep one checkout and run writers sequentially. Elsewhere, use isolated worktrees only if the setup supports them. Include the path and restriction in every brief. |
 | An overnight run moved but finished nothing | It needs a check that can pass or fail, not a duration. |
 | The reply claims success from a green build | Ask for the real command, flow, stored value, or profile. That's the prove-it-works principle. |
 

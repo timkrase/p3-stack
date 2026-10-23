@@ -12,7 +12,7 @@ A skill reads as if it were written for T3 Code first. Keep pstack's sentences v
 | `Task` tool, `subagent_type`, `run_in_background` | `delegate_task` with a self-contained brief; `mode: "async"` for background work; `task_status` to drain; `task_cancel` to stop |
 | Model slugs (`claude-opus-5-5-max`, `grok-4.7-xhigh-fast`, `gpt-5.6-sol-max`) | Named roles resolved from `orchestrator_capabilities` by `setup-p3` (role names below). Never hardcode a slug. |
 | "cloud agent", `environment: "cloud"`, `cloud_base_branch` | A delegated child task. Create top-level threads only when explicitly requested by the user. |
-| "each worker gets its own worktree or branch" | Create isolated worktrees with git before `delegate_task`, and put absolute paths in briefs. One writer per worktree. |
+| "each worker gets its own worktree or branch" | Follow `skills/principle-separate-before-serializing-shared-state/SKILL.md`. Managed boxes use one checkout and sequential writers. Only supported workstation setups use separate worktrees. Put the path and restriction in every brief. |
 | `/loop`, poll loops, `scripts/watch-pr` | `watch_pull_request`: T3 watches the PR and wakes the thread on checks finishing, new comments, or conflicts. Arm it, end the turn, triage on wake. For other cadences use `schedule_task`. |
 | Hourly audit ticks, recurring runs | `schedule_task` with `{"type":"interval","everyMs":...}` or `{"type":"fixed_time","timeOfDay":...,"weekdays":[...]}`; `run_scheduled_task_now` for an immediate run. |
 | Stack bookkeeping with `gt`, manual PR lists | `link_pull_request` for every layer, immediately; `list_thread_pull_requests` returns the stack bottom to top. |
