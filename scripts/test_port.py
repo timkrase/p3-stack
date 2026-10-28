@@ -25,6 +25,12 @@ class PortChecks(unittest.TestCase):
     def test_accepts_valid_skill(self):
         self.assertEqual(port.check(self.root)[0], [])
 
+    def test_ignores_installed_test_dependencies(self):
+        dependency = self.root / 'skills/example/scripts/node_modules/example/README.md'
+        dependency.parent.mkdir(parents=True)
+        dependency.write_text('Cursor dependency docs. [Contributing](CONTRIBUTING.md)\n')
+        self.assertEqual(port.check(self.root)[0], [])
+
     def test_rejects_unported_delegation_and_missing_reference(self):
         with self.skill.open('a') as file:
             file.write('\nUse the Task tool.\n[missing](missing.md)\n')

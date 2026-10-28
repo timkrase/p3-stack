@@ -33,6 +33,8 @@ def check(root, upstream=None):
         if not re.search(r'^description: \S', front[1], re.M):
             errors.append(f'{path.relative_to(root)}: missing description')
     for path in [*(root / 'skills').rglob('*.md'), *(root / 'agents').rglob('*.md')]:
+        if 'node_modules' in path.relative_to(root).parts:
+            continue
         text = path.read_text()
         for pattern, label in [(FORBIDDEN, 'unported mechanism'),
                                (re.compile(r'^(?:<{7}|={7}|>{7})', re.M), 'merge marker')]:

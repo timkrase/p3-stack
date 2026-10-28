@@ -13,9 +13,9 @@ pstack is poteto's answer to AI slop code. It turns an agent into an engineering
 
 ## This fork
 
-This fork updates [uzairansaruzi/p3-stack](https://github.com/uzairansaruzi/p3-stack) to pstack **0.15.30**. [UPSTREAM.json](UPSTREAM.json) records the exact source commit and every included or excluded skill and agent file. T3 retains its own delegation, model discovery, PR watching, scheduling, and browser tools. Upstream installation adapters, PR pollers, and orchestration scripts are not installed.
+This fork updates [uzairansaruzi/p3-stack](https://github.com/uzairansaruzi/p3-stack) to pstack **0.15.36**. [UPSTREAM.json](UPSTREAM.json) records the exact source commit and every included or excluded skill and agent file. T3 retains its own delegation, model discovery, PR watching, scheduling, and browser tools. Upstream installation adapters, PR pollers, and orchestration scripts are not installed.
 
-New skills include `/ketchup`, `/sharpen`, `/in-your-own-words`, `/create-formal-verification-skill`, `/maintain-formal-verification-skill`, and `/statechart`.
+New skills include `/ketchup-video`, `/ketchup`, `/sharpen`, `/in-your-own-words`, `/create-formal-verification-skill`, `/maintain-formal-verification-skill`, and `/statechart`.
 
 ## Install
 
@@ -39,7 +39,7 @@ cd p3-stack
 
 ## Skills
 
-architect, arena, automate-me, benchmark-checklist, blast-radius, bro, correct, create-formal-verification-skill, create-verification-skill, figure-it-out, how, in-your-own-words, interrogate, ketchup, maintain-formal-verification-skill, maintain-verification-skill, make-bot-ui, no-comments, p3-help, recall, reflect, setup-p3, sharpen, show-me-your-work, statechart, swarm, tdd, teach, technical-writing, typescript-best-practices, unslop, why.
+architect, arena, automate-me, benchmark-checklist, blast-radius, bro, correct, create-formal-verification-skill, create-verification-skill, figure-it-out, how, in-your-own-words, interrogate, ketchup, ketchup-video, maintain-formal-verification-skill, maintain-verification-skill, make-bot-ui, no-comments, p3-help, recall, reflect, setup-p3, sharpen, show-me-your-work, statechart, swarm, tdd, teach, technical-writing, typescript-best-practices, unslop, why.
 
 ## Principles
 
@@ -56,13 +56,17 @@ python3 -m unittest discover -s scripts -p 'test_*.py'
 
 To check source hashes and complete file coverage, clone `cursor/plugins` and run `python3 scripts/check-port.py --upstream /path/to/cursor-plugins`. The checkout must contain the commit recorded in `UPSTREAM.json`.
 
-Statechart requires Node.js 22 or later. Checking TLA+ models also requires Java 11 or later and [TLC 1.8.0](https://github.com/tlaplus/tlaplus/releases/tag/v1.8.0). Set `TLA2TOOLS` to the downloaded `tla2tools.jar`; set `JAVA` if Java is not on PATH. PNG export additionally needs the Mermaid CLI (`mmdc`). The scripts report a missing tool instead of claiming a check passed.
+Statechart's launcher supports Node.js 22.18 through 22.x, Node.js 23.6 or later, Bun 1.1.5 or later, or Deno 2.0 or later. Run its tests with one of those supported Node.js versions. The first model check uses `mise` to install the upstream-pinned TLC 1.7.4 and Java. Alternatively, set `TLA2TOOLS` to `tla2tools.jar` and `JAVA` to a Java 11 or later binary. SVG rendering uses Pele 1.9.0, as described in the statechart skill.
 
 ```sh
-TLA2TOOLS=/path/to/tla2tools.jar node --test skills/statechart/scripts/test/statechart.test.mjs
+cd skills/statechart/scripts
+npm install --ignore-scripts --package-lock=false
+TLA2TOOLS=/path/to/tla2tools.jar JAVA=/path/to/java npm test
 ```
 
-Tests that require TLC are skipped when `TLA2TOOLS` is unset. Run with TLC before publishing an update. Linux-specific process-namespace checks also need a Linux host that allows creating a PID namespace.
+The tests need a JDK because the config fuzz test runs a Java source file. On macOS, use `TMPDIR=/private/tmp` so relative-symlink tests start from a physical path. The tests install their pinned renderers in the user cache. Tests that require TLC are skipped when `TLA2TOOLS` is unset. Run with TLC before publishing an update.
+
+The external code-cleanup pass used by upstream's PR playbooks is bundled in `skills/p3-mode/references/code-cleanup.md`. Its source and hash are recorded in `UPSTREAM.json`, alongside the pstack files. This keeps the pass available without a separate plugin installation.
 
 ## Credit
 
