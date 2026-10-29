@@ -43,4 +43,7 @@ jobs:
               output.write(f'TLA2TOOLS={jar}\n')
           PY
       - name: Check statechart against TLC
-        run: node --test --test-timeout=300000 skills/statechart/scripts/test/statechart.test.mjs
+        working-directory: skills/statechart/scripts
+        run: |
+          npm install --ignore-scripts --package-lock=false
+          npm test

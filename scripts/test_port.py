@@ -145,5 +145,14 @@ class InstalledSkillPaths(unittest.TestCase):
         self.assertTrue(brief_references)
 
 
+class VerifiedTlc(unittest.TestCase):
+    def test_ci_checks_the_tlc_release_the_launcher_installs(self):
+        # tlaplus rebuilds the v1.8.0 prerelease jar nightly, so only a stable release can carry a checksum.
+        launcher = (ROOT / 'skills/statechart/scripts/run.ts').read_text()
+        url, checksum = re.search(r'tla2tools\[url=([^,\]]+),checksum=sha256:([0-9a-f]{64})\]', launcher).groups()
+        verification = json.loads((ROOT / 'UPSTREAM.json').read_text())['verification']
+        self.assertEqual((verification['tlcUrl'], verification['tlcSha256']), (url, checksum))
+
+
 if __name__ == '__main__':
     unittest.main()
