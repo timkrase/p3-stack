@@ -20,7 +20,7 @@ A skill reads as if it were written for T3 Code first. Keep pstack's sentences v
 | `AskQuestion` | Ask plainly in the thread. `t3_pending_request_list`/`t3_pending_request_read`/`t3_pending_request_respond` answer questions in other threads. |
 | `control-ui`, `control-cli` (from cursor-team-kit) | `preview_*` browser tools and `device_*` simulator tools; `preview_recording_start`/`preview_recording_stop` and `device_screenshot` for evidence; `html_preview` and `html_render` check and publish HTML artifacts. |
 | `~/.cursor/rules/pstack-models.mdc`, `/add-plugin` | `setup-p3` writes `p3-models.md`; install is a symlink of `skills/*` into `~/.agents/skills/` (see README). |
-| `poteto-mode`, `poteto-agent`, `poteto-help`, `setup-pstack` | `p3-mode`, `agents/p3-agent.md`, `p3-help`, `setup-p3`. |
+| `poteto-mode`, `poteto-agent`, `poteto-help`, `setup-pstack` | `p3-mode`, `skills/p3-mode/agents/p3-agent.md`, `p3-help`, `setup-p3`. |
 | Cursor custom modes ("press option+enter") | Skills are invoked by name (`/p3-mode`). No mode toggles. |
 
 Everything else in pstack transfers as written: the principles, the playbook shapes, the brief template, the reply style, the autonomy rules. Adopt it.
@@ -46,7 +46,8 @@ Keep these names exactly.
 
 - `skills/<name>/SKILL.md` is a skill. `skills/principle-*/SKILL.md` are the short principles.
 - `skills/p3-mode/SKILL.md` is the mode router; its playbooks live in `skills/p3-mode/playbooks/`.
-- `agents/` holds prompt briefs for delegated roles (`p3-agent.md`, `comment-sicko.md`), not harness agent definitions.
+- `skills/<name>/agents/` holds prompt briefs for that skill's delegated roles (`p3-mode/agents/p3-agent.md`, `no-comments/agents/comment-sicko.md`), not harness agent definitions.
+- Installers link each skill directory on its own, and agents join relative paths from that link. Write new backticked paths relative to the skill's own directory, and reach other skills only through `../<name>/`. Agent briefs in `skills/<name>/agents/` must follow this; the installed-path test in `scripts/test_port.py` resolves every path in them from the skill directory. Some ported playbooks and references keep upstream's file-relative paths, such as `../references/bugbot-triage.md`; keep those as they are. `check-port.py` accepts either base.
 
 ## T3 tool quick reference
 

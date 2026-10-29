@@ -3,10 +3,12 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = re.compile(
@@ -16,6 +18,21 @@ FORBIDDEN = re.compile(
     r'|control-ui|control-cli|browser\.preview|/visualize\b'
     r'|poteto-mode|poteto-agent|poteto-help|setup-pstack', re.M,
 )
+# A backticked relative `.md` path. Placeholders, globs, home, absolute, and URL paths fall outside it.
+SKILL_PATH = re.compile(r'`((?:\.\.?/)*[\w.-]+(?:/[\w.-]+)+\.md)(?:#[\w-]+)?`')
+FENCE = re.compile(r'^(`{3,})[^\n]*\n.*?^\1[ \t]*$', re.M | re.S)
+
+
+def skill_paths(text):
+    """Yield (line, path) for backticked paths outside fenced templates, which name paths in other repos."""
+    text = FENCE.sub(lambda match: '\n' * match[0].count('\n'), text)
+    for match in SKILL_PATH.finditer(text):
+        yield text.count('\n', 0, match.start()) + 1, match[1]
+
+
+def resolves(target):
+    # Tools join paths lexically from the skill's link, so `..` must not rely on the link's target.
+    return os.path.isfile(os.path.normpath(target)) and os.path.isfile(target)
 
 
 def check(root, upstream=None):
@@ -32,7 +49,11 @@ def check(root, upstream=None):
             errors.append(f'{path.relative_to(root)}: name must match directory')
         if not re.search(r'^description: \S', front[1], re.M):
             errors.append(f'{path.relative_to(root)}: missing description')
-    for path in [*(root / 'skills').rglob('*.md'), *(root / 'agents').rglob('*.md')]:
+    temporary = tempfile.TemporaryDirectory()
+    installed = Path(temporary.name)
+    for path in skills:
+        (installed / path.parent.name).symlink_to(path.parent, target_is_directory=True)
+    for path in (root / 'skills').rglob('*.md'):
         if 'node_modules' in path.relative_to(root).parts:
             continue
         text = path.read_text()
@@ -47,9 +68,14 @@ def check(root, upstream=None):
                 continue
             if not (path.parent / target).exists():
                 errors.append(f'{path.relative_to(root)}: broken local link: {target}')
+        local = path.relative_to(root / 'skills')
+        for line, target in skill_paths(text):
+            if not any(resolves(base / target) for base in (installed / local.parts[0], installed / local.parent)):
+                errors.append(f'{path.relative_to(root)}:{line}: broken skill path: {target}')
         for line in text.splitlines():
             if ('t3_thread_launch' in line or 'create_threads' in line) and 'explicitly' not in line:
                 errors.append(f'{path.relative_to(root)}: top-level threads need explicit user request')
+    temporary.cleanup()
     manifest = json.loads((root / 'UPSTREAM.json').read_text())
     sources = set()
     targets = set()

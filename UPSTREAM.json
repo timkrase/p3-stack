@@ -12,12 +12,12 @@
   "files": [
     {
       "source": "pstack/agents/comment-sicko.md",
-      "target": "agents/comment-sicko.md",
+      "target": "skills/no-comments/agents/comment-sicko.md",
       "sha256": "3e239e40b7b4b9beb2cf7f3ccc57f2388eb8b69bd1ba8ae888ef87ef6e0e2116"
     },
     {
       "source": "pstack/agents/poteto-agent.md",
-      "target": "agents/p3-agent.md",
+      "target": "skills/p3-mode/agents/p3-agent.md",
       "sha256": "979f18abd000d185a0b4c41a2a4111c0910596a7f5c81cbb571885bc721b2bf7"
     },
     {
