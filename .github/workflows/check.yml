@@ -27,7 +27,10 @@ jobs:
           bash -n install.sh
       - name: Fetch pinned pstack source
         run: |
-          git clone --filter=blob:none --no-checkout https://github.com/cursor/plugins.git "$RUNNER_TEMP/pstack"
+          # One request for the pinned commit. A blobless clone fetches each file on its own and gets rate limited.
+          commit=$(python3 -c "import json; print(json.load(open('UPSTREAM.json'))['commit'])")
+          git init -q "$RUNNER_TEMP/pstack"
+          git -C "$RUNNER_TEMP/pstack" fetch -q --depth 1 https://github.com/cursor/plugins.git "$commit"
           python3 scripts/check-port.py --upstream "$RUNNER_TEMP/pstack"
       - name: Fetch verified TLC
         run: |
