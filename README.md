@@ -13,7 +13,7 @@ pstack is poteto's answer to AI slop code. It turns an agent into an engineering
 
 ## This fork
 
-This fork updates [uzairansaruzi/p3-stack](https://github.com/uzairansaruzi/p3-stack) to pstack **0.15.36**. [UPSTREAM.json](UPSTREAM.json) records the exact source commit and every included or excluded skill and agent file. T3 retains its own delegation, model discovery, PR watching, scheduling, and browser tools. Upstream installation adapters, PR pollers, and orchestration scripts are not installed.
+This fork updates [uzairansaruzi/p3-stack](https://github.com/uzairansaruzi/p3-stack) to pstack **0.15.43**. [UPSTREAM.json](UPSTREAM.json) records the exact source commit and every included or excluded skill and agent file. T3 retains its own delegation, model discovery, PR watching, scheduling, and browser tools. Upstream installation adapters, PR pollers, and orchestration scripts are not installed.
 
 New skills include `/ketchup-video`, `/ketchup`, `/sharpen`, `/in-your-own-words`, `/create-formal-verification-skill`, `/maintain-formal-verification-skill`, and `/statechart`.
 
@@ -35,7 +35,7 @@ cd p3-stack
 
 ## The mode
 
-`p3-mode` routes every task. Its playbooks: investigation, bug fix, perf issue, hillclimb, runtime forensics, trace forensics, feature, refactoring, prototype, visual parity, authoring a skill, eval, babysit, shipping, autonomous run, orchestrate, autopilot-full, autopilot-stack, session pickup, pause safely, multi-phase plan, worktree cleanup, opening a PR.
+`p3-mode` routes every task. Its playbooks: investigation, bug fix, perf issue, hillclimb, runtime forensics, trace forensics, feature, refactoring, prototype, visual parity, authoring a skill, eval, babysit, shipping, autonomous run, autopilot-full, autopilot-stack, session pickup, pause safely, multi-phase plan, worktree cleanup, opening a PR.
 
 ## Skills
 

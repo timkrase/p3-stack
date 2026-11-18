@@ -27,9 +27,9 @@ Everything else in pstack transfers as written: the principles, the playbook sha
 
 ## Role names
 
-Code work reads its line in `p3-models.md`: `feature, refactoring`, `bug-fix`, `perf-issue`, `hillclimb`. Prose and judgment read `judgment and prose`; the hardest changes read `hardest tasks`.
+Code work reads its line in `p3-models.md`: `feature, refactoring`, `bug-fix`, `perf-issue`, `hillclimb`. Prose and judgment read `judgment and prose`; trivial mechanical edits and verification read `swarm workers`.
 
-Panels and investigators: `how explorer`, `how explainer`, `why investigators`, `why synthesizer`, `arena runners`, `arena cross-judge pool`, `swarm workers`, `architect runners`, `interrogate reviewers`, `reflect tooling`, `reflect judgment, divergent, synthesizer`.
+Panels: `arena runners`, `arena cross-judge pool`, `interrogate reviewers`.
 
 Keep these names exactly.
 
@@ -45,7 +45,7 @@ Keep these names exactly.
 ## Layout
 
 - `skills/<name>/SKILL.md` is a skill. `skills/principle-*/SKILL.md` are the short principles.
-- `skills/p3-mode/SKILL.md` is the mode router; its playbooks live in `skills/p3-mode/playbooks/`.
+- `skills/p3-mode/SKILL.md` is the mode router; its playbooks live in `skills/p3-mode/playbooks/`. `skills/p3-mode/worker.md` holds the operator's rules, and every delegated agent's kickoff opens by pointing at it.
 - `skills/<name>/agents/` holds prompt briefs for that skill's delegated roles (`p3-mode/agents/p3-agent.md`, `no-comments/agents/comment-sicko.md`), not harness agent definitions.
 - Installers link each skill directory on its own, and agents join relative paths from that link. Write new backticked paths relative to the skill's own directory, and reach other skills only through `../<name>/`. Agent briefs in `skills/<name>/agents/` must follow this; the installed-path test in `scripts/test_port.py` resolves every path in them from the skill directory. Some ported playbooks and references keep upstream's file-relative paths, such as `../references/bugbot-triage.md`; keep those as they are. `check-port.py` accepts either base.
 
